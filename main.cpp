@@ -1,0 +1,137 @@
+#include <iostream>
+#include <conio.h>
+#include <unistd.h>
+using namespace std;
+
+
+void welcome(); 
+void directing(); 
+
+unsigned int delay3 = 60000;   /*41900*/
+const int MAX_LEN = 30;
+const int MIN_LEN = 11;
+
+struct UserDetails {
+    char Name[MIN_LEN];
+    char ID[MIN_LEN];
+};
+
+enum {
+    LOST_ITEM   = '1',
+    FOUND_ITEM  = '2',
+    SEARCH_ITEM = '3',
+    EXIT        = '4',
+};
+
+
+int main() {
+
+    char user_name[MAX_LEN];
+    char user_ID[MAX_LEN];
+    int menu_option;
+
+    system("cls");
+    cout << "\n\n";
+    cout << "  Lost and Found Smart Campus" << endl;
+    cout << "--------------------------------------------";
+    cout << "\n\n\n";
+
+    cout << "   Enter Name \n\n > ";
+    cin.getline(user_name, sizeof(user_name));
+    cout << "\n\n";
+    cout << "   Enter ID \n\n > ";
+    cin.getline(user_ID, sizeof(user_ID));
+
+    directing();
+
+    do { //Main loop
+
+        do { //Menu loop
+
+            system("cls");
+            welcome();
+
+            cout << "\n\n\n\n";
+            cout << "\t\t  [1] Report Lost Item" << endl << endl;
+            cout << "\t\t  [2] Report Found Item" << endl << endl;
+            cout << "\t\t  [3] Search Items" << endl << endl;
+            cout << "\t\t  [4] Exit" << endl << endl;
+
+            cout << endl << "\t\t  Enter option : ";
+            menu_option = getche();
+
+            if (menu_option == EXIT) {
+                return 0;
+            }
+
+            if (menu_option == LOST_ITEM || menu_option == FOUND_ITEM || menu_option == SEARCH_ITEM) {
+                break;
+            }
+
+        }while (menu_option != LOST_ITEM && menu_option != FOUND_ITEM && menu_option != SEARCH_ITEM && menu_option != EXIT);
+
+        system("cls");
+
+        switch (menu_option) {
+
+            case LOST_ITEM:
+                cout << " LOST_ITEM";
+                break;
+
+            case FOUND_ITEM:
+                cout << " FOUND_ITEM";
+                break;
+
+            case SEARCH_ITEM:
+                cout << " SEARCH_ITEM";
+                break;
+
+            case EXIT:
+                cout << endl << endl << endl << " Exited successfully...";
+                return 0;
+                break;
+
+        }//end of switch
+         
+        cout << endl << "  Press any key... ";
+        (void)getch();
+         
+
+    }while (menu_option != EXIT);
+
+    return 0;
+
+}//end of main()
+
+
+void welcome() {
+
+    cout << endl << endl;
+    cout << "   db   d8b   db d88888b db       .o88b.  .d88b.  .88b  d88. d88888b\n";
+    usleep(delay3);
+    cout << "   88   I8I   88 88'     88      d8P  Y8 .8P  Y8. 88'YbdP`88 88'     \n";
+    usleep(delay3);
+    cout << "   88   I8I   88 88ooooo 88      8P      88    88 88  88  88 88ooooo \n";
+    usleep(delay3);
+    cout << "   Y8   I8I   88 88~~~~~ 88      8b      88    88 88  88  88 88~~~~~ \n";
+    usleep(delay3);
+    cout << "   `8b d8'8b d8' 88.     88booo. Y8b  d8 `8b  d8' 88  88  88 88.     \n";
+    usleep(delay3);
+    cout << "    `8b8' `8d8'  Y88888P Y88888P  `Y88P'  `Y88P'  YP  YP  YP Y88888P \n";
+    /* printf("\n -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\n\n"); */
+} 
+
+
+void directing() {
+
+    cout << "\n\n  Directing";
+    usleep(95000); 
+    cout << ".";
+    usleep(95000); 
+    cout << ".";
+    usleep(95000); 
+    cout << ".";
+    usleep(99999); 
+    cout << "\n";
+} 
+
