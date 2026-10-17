@@ -6,7 +6,8 @@
 using namespace std;
 
 
-void welcome(); 
+void welcome_animate(); 
+void welcome();
 void directing(); 
 
 unsigned int delay3 = 60000;   /*41900*/
@@ -31,6 +32,7 @@ int main() {
     char user_name[MAX_LEN];
     char user_ID[MAX_LEN];
     int menu_option;
+    int first_launch;
 
     system("cls");
     cout << "\n\n";
@@ -40,9 +42,20 @@ int main() {
 
     cout << "   Enter Name \n\n > ";
     cin.getline(user_name, sizeof(user_name));
+
+    if (user_name[0] == '\0') {
+        cout << endl << " Error: No input found" << endl;
+        return 0;
+    }
+
     cout << "\n\n";
     cout << "   Enter ID \n\n > ";
     cin.getline(user_ID, sizeof(user_ID));
+
+    if (user_ID[0] == '\0') {
+        cout << endl << " Error: No input found" << endl;
+        return 0;
+    }
 
     directing();
 
@@ -51,7 +64,14 @@ int main() {
         do { //Menu loop
 
             system("cls");
-            welcome();
+
+            if (first_launch == 1) {
+                welcome();
+            }
+
+            else{
+                welcome_animate();
+            }
 
             cout << "\n\n\n\n";
             cout << "\t\t  [1] Report Lost Item" << endl << endl;
@@ -63,6 +83,7 @@ int main() {
             menu_option = getche();
 
             if (menu_option == EXIT) {
+                cout << endl << endl << endl << " Exited successfully...";
                 return 0;
             }
 
@@ -88,14 +109,11 @@ int main() {
                 cout << " SEARCH_ITEM";
                 break;
 
-            case EXIT:
-                cout << endl << endl << endl << " Exited successfully...";
-                return 0;
-                break;
 
         }//end of switch
          
-        cout << endl << "  Press any key... ";
+        cout << endl << endl << "  Press any key... ";
+        first_launch = 1;
         (void)getch();
          
 
@@ -106,7 +124,7 @@ int main() {
 }//end of main()
 
 
-void welcome() {
+void welcome_animate() {
 
     cout << endl << endl;
     cout << "   db   d8b   db d88888b db       .o88b.  .d88b.  .88b  d88. d88888b\n";
@@ -122,6 +140,20 @@ void welcome() {
     cout << "    `8b8' `8d8'  Y88888P Y88888P  `Y88P'  `Y88P'  YP  YP  YP Y88888P \n";
     /* printf("\n -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\n\n"); */
 } 
+
+void welcome() {
+
+    cout << endl << endl;
+    cout << "   db   d8b   db d88888b db       .o88b.  .d88b.  .88b  d88. d88888b\n";
+    cout << "   88   I8I   88 88'     88      d8P  Y8 .8P  Y8. 88'YbdP`88 88'     \n";
+    cout << "   88   I8I   88 88ooooo 88      8P      88    88 88  88  88 88ooooo \n";
+    cout << "   Y8   I8I   88 88~~~~~ 88      8b      88    88 88  88  88 88~~~~~ \n";
+    cout << "   `8b d8'8b d8' 88.     88booo. Y8b  d8 `8b  d8' 88  88  88 88.     \n";
+    cout << "    `8b8' `8d8'  Y88888P Y88888P  `Y88P'  `Y88P'  YP  YP  YP Y88888P \n";
+    /* printf("\n -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\n\n"); */
+} 
+
+
 
 
 void directing() {
