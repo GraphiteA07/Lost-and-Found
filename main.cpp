@@ -10,14 +10,14 @@ void welcome_animate();
 void welcome();
 void directing(); 
 
-unsigned int delay3 = 60000;   /*41900*/
+unsigned int DELAY = 60000;   /*41900*/
 const int MAX_LEN = 30;
 const int MIN_LEN = 11;
 
-struct UserDetails {
-    char Name[MIN_LEN];
-    char ID[MIN_LEN];
-};
+/* struct UserDetails { */
+/*     char Name[MIN_LEN]; */
+/*     char ID[MIN_LEN]; */
+/* }; */
 
 enum {
     LOST_ITEM   = '1',
@@ -98,26 +98,29 @@ int main() {
         switch (menu_option) {
 
             case LOST_ITEM:
-                cout << " LOST_ITEM";
+                cout << endl << endl << "  Report Lost Item" << endl;
+                cout << "----------------------------------";
                 break;
 
             case FOUND_ITEM:
-                cout << " FOUND_ITEM";
+                cout << endl << endl << "  Report Found Item" << endl;
+                cout << "----------------------------------";
                 break;
 
             case SEARCH_ITEM:
-                cout << " SEARCH_ITEM";
+                cout << endl << endl << "  Search Item" << endl;
+                cout << "----------------------------------";
                 break;
 
 
         }//end of switch
          
         cout << endl << endl << "  Press any key... ";
-        first_launch = 1;
         (void)getch();
+        first_launch = 1;
          
 
-    }while (menu_option != EXIT);
+    }while (1);
 
     return 0;
 
@@ -128,15 +131,15 @@ void welcome_animate() {
 
     cout << endl << endl;
     cout << "   db   d8b   db d88888b db       .o88b.  .d88b.  .88b  d88. d88888b\n";
-    usleep(delay3);
+    usleep(DELAY);
     cout << "   88   I8I   88 88'     88      d8P  Y8 .8P  Y8. 88'YbdP`88 88'     \n";
-    usleep(delay3);
+    usleep(DELAY);
     cout << "   88   I8I   88 88ooooo 88      8P      88    88 88  88  88 88ooooo \n";
-    usleep(delay3);
+    usleep(DELAY);
     cout << "   Y8   I8I   88 88~~~~~ 88      8b      88    88 88  88  88 88~~~~~ \n";
-    usleep(delay3);
+    usleep(DELAY);
     cout << "   `8b d8'8b d8' 88.     88booo. Y8b  d8 `8b  d8' 88  88  88 88.     \n";
-    usleep(delay3);
+    usleep(DELAY);
     cout << "    `8b8' `8d8'  Y88888P Y88888P  `Y88P'  `Y88P'  YP  YP  YP Y88888P \n";
     /* printf("\n -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_\n\n"); */
 } 
