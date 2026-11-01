@@ -1,6 +1,7 @@
-//STATUS: Working
+//STATUS: Added Lost Item Details.
 
 #include <iostream>
+#include <string>
 #include <conio.h>
 #include <unistd.h>
 using namespace std;
@@ -9,15 +10,25 @@ using namespace std;
 void welcome_animate(); 
 void welcome();
 void directing(); 
+void display_missing_inputs(struct Details *p);
+bool is_blank(struct Details *p);
 
 unsigned int DELAY = 60000;   /*41900*/
-const int MAX_LEN = 30;
-const int MIN_LEN = 11;
+bool is_lost_active = false;
+/* unsigned const int MIN_LEN = 11; */
+/* unsigned const int MAX_LEN = 40; */
 
-/* struct UserDetails { */
-/*     char Name[MIN_LEN]; */
-/*     char ID[MIN_LEN]; */
-/* }; */
+struct Details {
+    string Name;
+    string ID;
+    string Category;
+    string Item_Name;
+    string Brand_Name;
+    string Item_Color;
+    string Unique_ID;
+    string Last_Seen_Location;
+    string Date_Time;
+};
 
 enum {
     LOST_ITEM   = '1',
@@ -29,10 +40,10 @@ enum {
 
 int main() {
 
-    char user_name[MAX_LEN];
-    char user_ID[MAX_LEN];
+    struct Details person;
+
     int menu_option;
-    int first_launch;
+    bool is_first_launch = false;
 
     system("cls");
     cout << "\n\n";
@@ -41,21 +52,27 @@ int main() {
     cout << "\n\n\n";
 
     cout << "   Enter Name \n\n > ";
-    cin.getline(user_name, sizeof(user_name));
+    getline(cin, person.Name);
 
-    if (user_name[0] == '\0') {
+    if (person.Name.empty()) {
         cout << endl << " Error: No input found" << endl;
         return 0;
     }
 
     cout << "\n\n";
-    cout << "   Enter ID \n\n > ";
-    cin.getline(user_ID, sizeof(user_ID));
 
-    if (user_ID[0] == '\0') {
-        cout << endl << " Error: No input found" << endl;
-        return 0;
+    cout << "   Enter ID \n\n > ";
+    getline(cin, person.ID);
+
+    while (person.ID.length() < 8) {
+
+    if (person.ID.empty() || person.ID.length() < 8) {
+        cout << endl << " Error: Invalid ID.Please try again" << endl << endl;
+        cout << " Enter ID: ";
+        getline(cin, person.ID);
     }
+    }//end of while()
+
 
     directing();
 
@@ -65,7 +82,7 @@ int main() {
 
             system("cls");
 
-            if (first_launch == 1) {
+            if (is_first_launch) {
                 welcome();
             }
 
@@ -97,14 +114,52 @@ int main() {
 
         switch (menu_option) {
 
+
             case LOST_ITEM:
+
                 cout << endl << endl << "  Report Lost Item" << endl;
-                cout << "----------------------------------";
+                cout << "----------------------------------" << endl << endl << endl;
+
+
+
+                if (!is_lost_active) {
+
+                cout << "  For Example: [Electronics | Documents | Apparel | Valuables | Other]" << endl << endl; 
+                cout << "  Enter Item Category: ";
+                getline(cin, person.Category);
+                cout << endl << "  Enter Item Name: ";
+                getline(cin, person.Item_Name);
+                cout << endl << "  Enter Brand Name: ";
+                getline(cin, person.Brand_Name);
+                cout << endl << "  Enter Color: ";
+                getline(cin, person.Item_Color);
+                cout << endl << "  For Example: [Serial # | Stickers | dents | Custom marks | Other]" << endl; 
+                cout << endl << "  Enter Unique Identifiers: ";
+                getline(cin, person.Unique_ID);
+                cout << endl << "  Enter Last Seen Location: ";
+                getline(cin, person.Last_Seen_Location);
+                cout << endl << "  Enter Date and Time (DD-MM-YYYY HH:MM AM/PM): ";
+                getline(cin, person.Date_Time);
+
+                is_lost_active = true;
+                }
+
+                else {
+                    display_missing_inputs(&person);
+
+                    if (!is_blank(&person)) {
+                        cout << endl <<  "  All details are provided.";
+                    }
+                }
+
                 break;
+
+
 
             case FOUND_ITEM:
                 cout << endl << endl << "  Report Found Item" << endl;
                 cout << "----------------------------------";
+
                 break;
 
             case SEARCH_ITEM:
@@ -117,7 +172,7 @@ int main() {
          
         cout << endl << endl << "  Press any key... ";
         (void)getch();
-        first_launch = 1;
+        is_first_launch = true;
          
 
     }while (1);
@@ -172,3 +227,58 @@ void directing() {
     cout << "\n";
 } 
 
+bool is_blank(struct Details *p) {
+
+    if(p->Category.empty() || p->Item_Name.empty() || p->Brand_Name.empty() ||
+       p->Item_Color.empty() || p->Unique_ID.empty() || p->Last_Seen_Location.empty() ||
+       p->Date_Time.empty()) {
+        return true;
+    }
+
+    else {
+        return false;
+    }
+}
+
+void display_missing_inputs(struct Details *p) {
+
+    if (is_lost_active) {
+
+        if (p->Category.empty()) {
+                cout << "  For Example: [Electronics | Documents | Apparel | Valuables | Other]" << endl << endl; 
+                cout << "  Enter Item Category: ";
+                getline(cin, p->Category);
+        }
+
+         if (p->Item_Name.empty()) {
+                cout << endl << "  Enter Item Name: ";
+                getline(cin, p->Item_Name);
+        }
+
+         if (p->Brand_Name.empty()) {
+                cout << endl << "  Enter Brand Name: ";
+                getline(cin, p->Brand_Name);
+        }
+
+         if(p->Item_Color.empty()) {
+                cout << endl << "  Enter Color: ";
+                getline(cin, p->Item_Color);
+        }
+
+         if (p->Unique_ID.empty()) {
+                cout << endl << "  For Example: [Serial # | Stickers | dents | Custom marks | Other]" << endl; 
+                cout << endl << "  Enter Unique Identifiers: ";
+                getline(cin, p->Unique_ID);
+        }
+
+         if (p->Last_Seen_Location.empty()) {
+                cout << endl << "  Enter Last Seen Location: ";
+                getline(cin, p->Last_Seen_Location);
+        }
+
+         if (p->Date_Time.empty()) {
+                cout << endl << "  Enter Date and Time (DD-MM-YYYY HH:MM AM/PM): ";
+                getline(cin, p->Date_Time);
+        }
+    }//end of outer if()
+}
