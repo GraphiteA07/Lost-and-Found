@@ -1,4 +1,4 @@
-//STATUS: Added Found Item Details.
+//STATUS: Added Display Details option.
 
 #include <iostream>
 #include <string>
@@ -37,10 +37,11 @@ struct Details {
 };
 
 enum {
-    LOST_ITEM   = '1',
-    FOUND_ITEM  = '2',
-    SEARCH_ITEM = '3',
-    EXIT        = '4',
+    LOST_ITEM          = '1',
+    FOUND_ITEM         = '2',
+    SEARCH_ITEM        = '3',
+    DISPLAY_DETAILS    = '4',
+    EXIT               = '5',
 };
 
     struct Details LI_person;
@@ -50,6 +51,7 @@ int main() {
 
 
     int menu_option;
+    int display_details_option;
     bool is_first_launch = false;
 
     system("cls");
@@ -60,6 +62,7 @@ int main() {
 
     cout << "   Enter Name \n\n > ";
     getline(cin, LI_person.Name);
+
 
     if (LI_person.Name.empty()) {
         cout << endl << " Error: No input found" << endl;
@@ -79,6 +82,11 @@ int main() {
         getline(cin, LI_person.ID);
     }
     }//end of while()
+     
+    FI_person.Name = LI_person.Name;
+    FI_person.ID   = LI_person.ID;
+     
+     
 
 
     directing();
@@ -101,7 +109,8 @@ int main() {
             cout << "\t\t\t\t\t\t    [1] Report Lost Item" << endl << endl;
             cout << "\t\t\t\t\t\t    [2] Report Found Item" << endl << endl;
             cout << "\t\t\t\t\t\t    [3] Search Items" << endl << endl;
-            cout << "\t\t\t\t\t\t    [4] Exit" << endl << endl;
+            cout << "\t\t\t\t\t\t    [4] Display Details" << endl << endl;
+            cout << "\t\t\t\t\t\t    [5] Exit" << endl << endl;
 
             cout << endl << "\t\t\t\t\t\t    Enter option : ";
             menu_option = getche();
@@ -111,11 +120,30 @@ int main() {
                 return 0;
             }
 
-            if (menu_option == LOST_ITEM || menu_option == FOUND_ITEM || menu_option == SEARCH_ITEM) {
+            if (menu_option == DISPLAY_DETAILS) {
+
+                cout << endl << endl << "\t\t\t\t\t\t    [1] Lost Item Details" << endl;
+                cout << "\t\t\t\t\t\t    [2] Found Item Details" << endl << endl;
+                
+                do {
+                    cout << "\t\t\t\t\t\t    Option : ";
+                    display_details_option = getche();
+                	
+                	if (display_details_option == LOST_ITEM || display_details_option == FOUND_ITEM) {
+                		break;
+					}
+					
+					if (display_details_option != LOST_ITEM && display_details_option != FOUND_ITEM) {
+						cout << endl << endl << "  Error: Invalid Option" << endl;
+					}
+				}while(display_details_option != LOST_ITEM && display_details_option != FOUND_ITEM);
+            }// end of outer if()
+
+            if (menu_option == LOST_ITEM || menu_option == FOUND_ITEM || menu_option == SEARCH_ITEM || menu_option == DISPLAY_DETAILS) {
                 break;
             }
 
-        }while (menu_option != LOST_ITEM && menu_option != FOUND_ITEM && menu_option != SEARCH_ITEM && menu_option != EXIT);
+        }while (menu_option != LOST_ITEM && menu_option != FOUND_ITEM && menu_option != SEARCH_ITEM && menu_option != DISPLAY_DETAILS && menu_option != EXIT);
 
         system("cls");
 
@@ -151,6 +179,45 @@ int main() {
                 cout << endl << endl << "  Search Item" << endl;
                 cout << "----------------------------------";
                 break;
+                
+                case DISPLAY_DETAILS:
+
+                if (display_details_option == LOST_ITEM) {
+
+                cout << endl << endl << "  Lost Item Details" << endl;
+                cout << "----------------------------------" << endl << endl << endl;
+                cout << "   Name                : " << LI_person.Name << endl;
+                cout << "   ID                  : " << LI_person.ID << endl;
+                cout << "   Category            : " << LI_person.Category << endl;
+                cout << "   Item name           : " << LI_person.Item_Name << endl;
+                cout << "   Brand name          : " << LI_person.Brand_Name << endl;
+                cout << "   Item color          : " << LI_person.Item_Color << endl;
+                cout << "   Unique ID           : " << LI_person.Unique_ID << endl;
+                cout << "   Last seen location  : " << LI_person.Last_Seen_Location << endl;
+                cout << "   Date time           : " << LI_person.Date_Time << endl;
+                cout << "   Contact info        : " << LI_person.Contact_Info << endl;
+
+                }
+
+                if (display_details_option == FOUND_ITEM) {
+
+                cout << endl << endl << "  Found Item Details" << endl;
+                cout << "----------------------------------" << endl << endl << endl;
+                cout << "   Name                : " << FI_person.Name << endl;
+                cout << "   ID                  : " << FI_person.ID << endl;
+                cout << "   Category            : " << FI_person.Category << endl;
+                cout << "   Item name           : " << FI_person.Item_Name << endl;
+                cout << "   Brand name          : " << FI_person.Brand_Name << endl;
+                cout << "   Item color          : " << FI_person.Item_Color << endl;
+                cout << "   Unique ID           : " << FI_person.Unique_ID << endl;
+                cout << "   Last seen location  : " << FI_person.Last_Seen_Location << endl;
+                cout << "   Date time           : " << FI_person.Date_Time << endl;
+                cout << "   Contact info        : " << FI_person.Contact_Info << endl;
+
+                }
+                
+                break;
+                	
 
 
         }//end of switch
@@ -357,5 +424,3 @@ void display_FI_inputs(struct Details *FI_person) {
      
      
 }
-
-
