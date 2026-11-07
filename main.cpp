@@ -1,4 +1,21 @@
-//STATUS: Added Display Details option.
+/* STATUS: Working
+  
+Added:
+1) Exit? (y/n) to reduce accidental exits. 
+2) void display_inputs(struct Details *p);
+3) void display_details(struct Details *p);
+4) bool is_input_blank(struct Details *p);    
+
+Removed:
+1) void display_LI_inputs(struct Details *LI_person);
+2) void display_FI_inputs(struct Details *FI_person);
+3) bool is_LI_input_blank(struct Details *LI_person);
+4) bool is_FI_input_blank(struct Details *FI_person); 
+
+Remove kyu kiye functions:
+- Aik hi kaam do alag alag functions kar rahe the.
+  Ab aik hi function kar raha hei
+*/
 
 #include <iostream>
 #include <string>
@@ -10,17 +27,13 @@ using namespace std;
 void directing(); 
 void lost_and_found();
 void lost_and_found_animate(); 
-void display_LI_inputs(struct Details *LI_person);
-void display_FI_inputs(struct Details *FI_person);
-bool is_LI_input_blank(struct Details *LI_person);
-bool is_FI_input_blank(struct Details *FI_person);
+void display_inputs(struct Details *p);
+void display_details(struct Details *p);
+bool is_input_blank(struct Details *p);
 
 unsigned int DELAY = 60000;   /*41900*/
 /* bool is_lost_active = false; */
 /* bool is_found_active = false; */
-
-/* unsigned const int MIN_LEN = 11; */
-/* unsigned const int MAX_LEN = 40; */
 
 struct Details {
     string Name;
@@ -33,7 +46,6 @@ struct Details {
     string Last_Seen_Location;
     string Date_Time;
     string Contact_Info;
-    
 };
 
 enum {
@@ -44,14 +56,14 @@ enum {
     EXIT               = '5',
 };
 
-    struct Details LI_person;
-    struct Details FI_person;
 
 int main() {
 
+    struct Details LI_person;
+    struct Details FI_person;
 
     int menu_option;
-    int display_details_option;
+    int display_details_option = 0;
     bool is_first_launch = false;
 
     system("cls");
@@ -75,21 +87,19 @@ int main() {
     getline(cin, LI_person.ID);
 
     while (LI_person.ID.length() < 8) {
-
-    if (LI_person.ID.empty() || LI_person.ID.length() < 8) {
         cout << endl << " Error: Invalid ID.Please try again" << endl << endl;
         cout << " Enter ID: ";
         getline(cin, LI_person.ID);
-    }
     }//end of while()
-     
+
     FI_person.Name = LI_person.Name;
     FI_person.ID   = LI_person.ID;
-     
-     
+
+
 
 
     directing();
+start:
 
     do { //Main loop
 
@@ -116,118 +126,107 @@ int main() {
             menu_option = getche();
 
             if (menu_option == EXIT) {
-                cout << endl << endl << endl << " Exited successfully...";
-                return 0;
-            }
+
+                while (menu_option != 'n' && menu_option != 'N' && menu_option != 'y' && menu_option != 'Y') {
+                cout << "\n\n\t\t\t\t\t\t    Exit? (y/n) : ";
+                menu_option = getche();
+
+                if (menu_option == 'y' || menu_option == 'Y') {
+                    cout << endl << endl << endl << " Exited successfully...";
+                    return 0;
+                }
+
+                if (menu_option == 'n' || menu_option == 'N') {
+                    is_first_launch = true;
+                    goto start;
+                }
+
+                }// end of while()
+            }//end of outer if()
 
             if (menu_option == DISPLAY_DETAILS) {
 
                 cout << endl << endl << "\t\t\t\t\t\t    [1] Lost Item Details" << endl;
                 cout << "\t\t\t\t\t\t    [2] Found Item Details" << endl << endl;
-                
+
                 do {
                     cout << "\t\t\t\t\t\t    Option : ";
                     display_details_option = getche();
-                	
-                	if (display_details_option == LOST_ITEM || display_details_option == FOUND_ITEM) {
-                		break;
-					}
-					
-					if (display_details_option != LOST_ITEM && display_details_option != FOUND_ITEM) {
-						cout << endl << endl << "  Error: Invalid Option" << endl;
-					}
-				}while(display_details_option != LOST_ITEM && display_details_option != FOUND_ITEM);
+
+                    if (display_details_option == LOST_ITEM || display_details_option == FOUND_ITEM) {
+                        break;
+                    }
+
+                    if (display_details_option != LOST_ITEM && display_details_option != FOUND_ITEM) {
+                        cout << endl << endl << "  Error: Invalid Option" << endl;
+                    }
+                }while(display_details_option != LOST_ITEM && display_details_option != FOUND_ITEM);
             }// end of outer if()
 
             if (menu_option == LOST_ITEM || menu_option == FOUND_ITEM || menu_option == SEARCH_ITEM || menu_option == DISPLAY_DETAILS) {
                 break;
             }
 
-        }while (menu_option != LOST_ITEM && menu_option != FOUND_ITEM && menu_option != SEARCH_ITEM && menu_option != DISPLAY_DETAILS && menu_option != EXIT);
+        }while (menu_option != LOST_ITEM && menu_option != FOUND_ITEM && menu_option != SEARCH_ITEM && menu_option != DISPLAY_DETAILS && menu_option != EXIT); // end of Menu Loop
 
         system("cls");
 
         switch (menu_option) {
 
-
             case LOST_ITEM:
-
                 cout << endl << endl << "  Report Lost Item" << endl;
                 cout << "----------------------------------" << endl << endl << endl;
-                display_LI_inputs(&LI_person);
+                display_inputs(&LI_person);
 
-                    if (!is_LI_input_blank(&LI_person)) {
-                        cout << endl << "  All details are provided.";
-                    }
-
+                if (!is_input_blank(&LI_person)) {
+                    cout << endl << "  All details are provided.";
+                }
                 break;
-
 
 
             case FOUND_ITEM:
                 cout << endl << endl << "  Report Found Item" << endl;
                 cout << "----------------------------------" << endl << endl << endl;
+                display_inputs(&FI_person);
 
-                    display_FI_inputs(&FI_person);
-
-                    if (!is_FI_input_blank(&FI_person)) {
-                        cout << endl <<  "  All details are provided.";
-                    }
+                if (!is_input_blank(&FI_person)) {
+                    cout << endl <<  "  All details are provided.";
+                }
                 break;
+
 
             case SEARCH_ITEM:
                 cout << endl << endl << "  Search Item" << endl;
                 cout << "----------------------------------";
                 break;
-                
-                case DISPLAY_DETAILS:
 
+
+            case DISPLAY_DETAILS:
                 if (display_details_option == LOST_ITEM) {
 
-                cout << endl << endl << "  Lost Item Details" << endl;
-                cout << "----------------------------------" << endl << endl << endl;
-                cout << "   Name                : " << LI_person.Name << endl;
-                cout << "   ID                  : " << LI_person.ID << endl;
-                cout << "   Category            : " << LI_person.Category << endl;
-                cout << "   Item name           : " << LI_person.Item_Name << endl;
-                cout << "   Brand name          : " << LI_person.Brand_Name << endl;
-                cout << "   Item color          : " << LI_person.Item_Color << endl;
-                cout << "   Unique ID           : " << LI_person.Unique_ID << endl;
-                cout << "   Last seen location  : " << LI_person.Last_Seen_Location << endl;
-                cout << "   Date time           : " << LI_person.Date_Time << endl;
-                cout << "   Contact info        : " << LI_person.Contact_Info << endl;
-
+                    cout << endl << endl << "  Lost Item Details" << endl;
+                    cout << "----------------------------------" << endl << endl << endl;
+                    display_details(&LI_person);
                 }
 
                 if (display_details_option == FOUND_ITEM) {
 
-                cout << endl << endl << "  Found Item Details" << endl;
-                cout << "----------------------------------" << endl << endl << endl;
-                cout << "   Name                : " << FI_person.Name << endl;
-                cout << "   ID                  : " << FI_person.ID << endl;
-                cout << "   Category            : " << FI_person.Category << endl;
-                cout << "   Item name           : " << FI_person.Item_Name << endl;
-                cout << "   Brand name          : " << FI_person.Brand_Name << endl;
-                cout << "   Item color          : " << FI_person.Item_Color << endl;
-                cout << "   Unique ID           : " << FI_person.Unique_ID << endl;
-                cout << "   Last seen location  : " << FI_person.Last_Seen_Location << endl;
-                cout << "   Date time           : " << FI_person.Date_Time << endl;
-                cout << "   Contact info        : " << FI_person.Contact_Info << endl;
-
+                    cout << endl << endl << "  Found Item Details" << endl;
+                    cout << "----------------------------------" << endl << endl << endl;
+                    display_details(&FI_person);
                 }
-                
                 break;
-                	
+
 
 
         }//end of switch
-         
+
         cout << endl << endl << "  Press any key... ";
         (void)getch();
         is_first_launch = true;
-         
 
-    }while (1);
+
+    }while (1); //end of Main Loop
 
     return 0;
 
@@ -240,7 +239,7 @@ void lost_and_found_animate() {
     cout << "  $$\\                            $$\\                                     $$\\       $$$$$$$$\\                                  $$\\ \n";
     usleep(DELAY);
     cout << "  $$ |                           $$ |                                    $$ |      $$  _____|                                 $$ |\n";
-    
+
     usleep(DELAY);
     cout << "  $$ |      $$$$$$\\   $$$$$$$\\ $$$$$$\\          $$$$$$\\  $$$$$$$\\   $$$$$$$ |      $$ |    $$$$$$\\  $$\\   $$\\ $$$$$$$\\   $$$$$$$ |\n";
 
@@ -292,11 +291,11 @@ void directing() {
     cout << "\n";
 } 
 
-bool is_LI_input_blank(struct Details *LI_person) {
+bool is_input_blank(struct Details *p) {
 
-    if(LI_person->Category.empty() || LI_person->Item_Name.empty() || LI_person->Brand_Name.empty() ||
-       LI_person->Item_Color.empty() || LI_person->Unique_ID.empty() || LI_person->Last_Seen_Location.empty() ||
-       LI_person->Date_Time.empty() || LI_person->Contact_Info.empty()) {
+    if(p->Category.empty() || p->Item_Name.empty() || p->Brand_Name.empty() ||
+            p->Item_Color.empty() || p->Unique_ID.empty() || p->Last_Seen_Location.empty() ||
+            p->Date_Time.empty() || p->Contact_Info.empty()) {
         return true;
     }
 
@@ -305,122 +304,61 @@ bool is_LI_input_blank(struct Details *LI_person) {
     }
 }
 
-bool is_FI_input_blank(struct Details *FI_person) {
+void display_inputs(struct Details *p) {
 
-    if(FI_person->Category.empty() || FI_person->Item_Name.empty() || FI_person->Brand_Name.empty() ||
-       FI_person->Item_Color.empty() || FI_person->Unique_ID.empty() || FI_person->Last_Seen_Location.empty() ||
-       FI_person->Date_Time.empty() || FI_person->Contact_Info.empty()) {
-        return true;
+    if (p->Category.empty()) {
+        cout << "  For Example: [Electronics | Documents | Apparel | Valuables | Other]" << endl << endl; 
+        cout << "  Enter Item Category: ";
+        getline(cin, p->Category);
     }
 
-    else {
-        return false;
+    if (p->Item_Name.empty()) {
+        cout << endl << "  Enter Item Name: ";
+        getline(cin, p->Item_Name);
+    }
+
+    if (p->Brand_Name.empty()) {
+        cout << endl << "  Enter Brand Name: ";
+        getline(cin, p->Brand_Name);
+    }
+
+    if(p->Item_Color.empty()) {
+        cout << endl << "  Enter Color: ";
+        getline(cin, p->Item_Color);
+    }
+
+    if (p->Unique_ID.empty()) {
+        cout << endl << "  For Example: [Serial # | Stickers | dents | Custom marks | Other]" << endl; 
+        cout << endl << "  Enter Unique Identifiers: ";
+        getline(cin, p->Unique_ID);
+    }
+
+    if (p->Last_Seen_Location.empty()) {
+        cout << endl << "  Enter Last Seen Location: ";
+        getline(cin, p->Last_Seen_Location);
+    }
+
+    if (p->Date_Time.empty()) {
+        cout << endl << "  Enter Date and Time (DD-MM-YYYY HH:MM AM/PM): ";
+        getline(cin, p->Date_Time);
+    }
+
+    if (p->Contact_Info.empty()) {
+        cout << endl << "  Enter Contact Info \n(For Example: [Phone Number | Gmail | Other]): ";
+        getline(cin, p->Contact_Info);
     }
 }
 
+void display_details(struct Details *p) {
 
-
-void display_LI_inputs(struct Details *LI_person) {
-
-    /* if (is_lost_active) { */
-
-        if (LI_person->Category.empty()) {
-                cout << "  For Example: [Electronics | Documents | Apparel | Valuables | Other]" << endl << endl; 
-                cout << "  Enter Item Category: ";
-                getline(cin, LI_person->Category);
-        }
-
-         if (LI_person->Item_Name.empty()) {
-                cout << endl << "  Enter Item Name: ";
-                getline(cin, LI_person->Item_Name);
-        }
-
-         if (LI_person->Brand_Name.empty()) {
-                cout << endl << "  Enter Brand Name: ";
-                getline(cin, LI_person->Brand_Name);
-        }
-
-         if(LI_person->Item_Color.empty()) {
-                cout << endl << "  Enter Color: ";
-                getline(cin, LI_person->Item_Color);
-        }
-
-         if (LI_person->Unique_ID.empty()) {
-                cout << endl << "  For Example: [Serial # | Stickers | dents | Custom marks | Other]" << endl; 
-                cout << endl << "  Enter Unique Identifiers: ";
-                getline(cin, LI_person->Unique_ID);
-        }
-
-         if (LI_person->Last_Seen_Location.empty()) {
-                cout << endl << "  Enter Last Seen Location: ";
-                getline(cin, LI_person->Last_Seen_Location);
-        }
-
-         if (LI_person->Date_Time.empty()) {
-                cout << endl << "  Enter Date and Time (DD-MM-YYYY HH:MM AM/PM): ";
-                getline(cin, LI_person->Date_Time);
-        }
-
-         if (LI_person->Contact_Info.empty()) {
-                cout << endl << "  Enter Contact Info \n(For Example: [Phone Number | Gmail | Other]): ";
-                getline(cin, LI_person->Contact_Info);
-         }
-
-
-    /* }//end of outer if() */
-     
-     
-}
-
-
-void display_FI_inputs(struct Details *FI_person) {
-
-    /* if (is_found_active) { */
-
-        if (FI_person->Category.empty()) {
-                cout << "  For Example: [Electronics | Documents | Apparel | Valuables | Other]" << endl << endl; 
-                cout << "  Enter Item Category: ";
-                getline(cin, FI_person->Category);
-        }
-
-         if (FI_person->Item_Name.empty()) {
-                cout << endl << "  Enter Item Name: ";
-                getline(cin, FI_person->Item_Name);
-        }
-
-         if (FI_person->Brand_Name.empty()) {
-                cout << endl << "  Enter Brand Name: ";
-                getline(cin, FI_person->Brand_Name);
-        }
-
-         if(FI_person->Item_Color.empty()) {
-                cout << endl << "  Enter Color: ";
-                getline(cin, FI_person->Item_Color);
-        }
-
-         if (FI_person->Unique_ID.empty()) {
-                cout << endl << "  For Example: [Serial # | Stickers | dents | Custom marks | Other]" << endl; 
-                cout << endl << "  Enter Unique Identifiers: ";
-                getline(cin, FI_person->Unique_ID);
-        }
-
-         if (FI_person->Last_Seen_Location.empty()) {
-                cout << endl << "  Enter Last Seen Location: ";
-                getline(cin, FI_person->Last_Seen_Location);
-        }
-
-         if (FI_person->Date_Time.empty()) {
-                cout << endl << "  Enter Date and Time (DD-MM-YYYY HH:MM AM/PM): ";
-                getline(cin, FI_person->Date_Time);
-        }
-
-         if (FI_person->Contact_Info.empty()) {
-                cout << endl << "  Enter Contact Info \n(For Example: [Phone Number | Gmail | Other]): ";
-                getline(cin, FI_person->Contact_Info);
-         }
-
-
-    /* }//end of outer if() */
-     
-     
+    cout << "   Name                : " << p->Name << endl;
+    cout << "   ID                  : " << p->ID << endl;
+    cout << "   Category            : " << p->Category << endl;
+    cout << "   Item name           : " << p->Item_Name << endl;
+    cout << "   Brand name          : " << p->Brand_Name << endl;
+    cout << "   Item color          : " << p->Item_Color << endl;
+    cout << "   Unique ID           : " << p->Unique_ID << endl;
+    cout << "   Last seen location  : " << p->Last_Seen_Location << endl;
+    cout << "   Date time           : " << p->Date_Time << endl;
+    cout << "   Contact info        : " << p->Contact_Info << endl;
 }
